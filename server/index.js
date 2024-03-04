@@ -251,6 +251,29 @@ app.post('/saveMessage/:conversationID', async (req, res) => {
     }
 
 });
+app.get('/searchForUsers/:email', async (req, res) => {
+
+    const jwt = req.headers.authorization.split(' ')[1];
+    if(verifyJWT(jwt) === false) {
+        console.log("Invalid Token");
+        res.sendStatus(403);
+        return;
+    } 
+
+    let results = [];
+    try {
+        if(!req.params.email) {
+            res.send([]);
+        }
+        cursor = usersCollection.find({ "email": { "$regex": `^${req.params.email}` } });
+        for await (const result of cursor) {
+            results.push(result);
+        }
+    } catch(err) {
+        res.sendStatus(500);
+    }
+    res.send(results);
+});
 
 app.get('/deleteUsers', (req, res) => {
     try {   
