@@ -4,7 +4,7 @@ import axios from 'axios';
 import { UserContext } from '../UserWrapper';
 
 export default function SignUp() {
-    const [ username, setUsername ] = useState('');
+    const [ email, setEmail ] = useState('');
     const [ password, setPassword ] = useState('');
     const [ signUpSuccessful, setSignUpSuccessful ] = useState(true);
 
@@ -13,7 +13,7 @@ export default function SignUp() {
     const userContext = useContext(UserContext);
 
     function send() {  
-        let data = { username: username, 
+        let data = { email: email, 
                      password: password };
         
             axios.post('http://localhost:8080/signUp', data).then(res => {
@@ -34,10 +34,10 @@ export default function SignUp() {
         <div className='loginClass'>
             <div>
                 <h2>Sign Up</h2>
-                <label>Username</label>
+                <label>Email</label>
                 <input type='text' onChange={(e) => {
-                    setUsername(e.target.value);
-                }} placeholder='Username...'/>
+                    setEmail(e.target.value);
+                }} placeholder='Email...'/>
             </div>
             <div>
                 <label>Password</label>

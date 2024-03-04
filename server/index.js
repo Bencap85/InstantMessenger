@@ -73,13 +73,13 @@ let usersCollection = dbUtils.connect().db('InstantMessengerDB').collection('use
 let conversationsCollection = dbUtils.connect().db('InstantMessengerDB').collection('conversations');
 
 app.post('/login', async (req, res) => {
-    let username = req.body.username;
+    let email = req.body.email;
     let password = req.body.password;
 
     let user = null;
 
     try {
-        user = await usersCollection.findOne({ username: username, password: password });
+        user = await usersCollection.findOne({ email: email, password: password });
     } catch(err) {
         res.sendStatus(500);
     }
@@ -89,16 +89,16 @@ app.post('/login', async (req, res) => {
         return;
     }
 
-    let token = createJWT(user.username+user.password);
+    let token = createJWT(user.email+user.password);
     res.status(200).json({ token: token, user }).send();
     
 });
 app.post('/signUp', async (req, res) => {
-    let username = req.body.username;
+    let email = req.body.email;
     let password = req.body.password;
     let conversations = [];
 
-    let user = new User({username: username, password: password, conversations: conversations});
+    let user = new User({email: email, password: password, conversations: conversations});
     
     try {
         await usersCollection.insertOne(user);
@@ -107,7 +107,7 @@ app.post('/signUp', async (req, res) => {
         console.log(err);
         res.status(500).send();
     }
-    let token = createJWT(username+password);
+    let token = createJWT(email+password);
     console.log("User: " + JSON.stringify(user));
     res.status(201).json({ token: token, user: user }).send();
     

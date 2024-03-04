@@ -3,8 +3,8 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-const createJWT = (username) => {
-    const token = jwt.sign({username: username}, process.env.TOKEN_SECRET, { expiresIn: 30 * 60 });
+const createJWT = (email) => {
+    const token = jwt.sign({email: email}, process.env.TOKEN_SECRET, { expiresIn: 30 * 60 });
     return token;
 
 }
