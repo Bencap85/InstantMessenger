@@ -1,0 +1,23 @@
+POST http://localhost:8080/updateLastViewedByMember/65d7a91370106ace1d1fd163
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IiIsImlhdCI6MTcwNDMwNTk1N30.B_AYjC_iwYEknY2v9712RBloigujYGEnOAooZ8AgJLU
+Content-Type: application/json
+
+{
+    "user": { "_id": "65b9081914120e774df911df" },
+    "newTime": "111111111111"
+}
+
+###
+GET http://localhost:8080/getUserConversations/65b9081914120e774df911df
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImhoIiwiaWF0IjoxNzA2NjI4NDI1LCJleHAiOjE3MDY2MzAyMjV9.WudOZwWIns2PoBZoUiXeGYJ8MFE54pw3BOBv5O3xeFo
+###
+
+GET http://localhost:8080/deleteUsers
+
+###
+
+GET http://localhost:8080/deleteConversations
+
+
+
+
