@@ -177,6 +177,7 @@ app.post('/createConversation', async (req, res) => {
     res.status(201).send({ "message": "Successfully created new conversation" });
 });
 app.post('/updateLastViewedByMember/:conversationID', async (req, res) => {
+    console.log("Updating...");
     try {
         const conversation = await conversationsCollection.findOne({ '_id' : new mongoose.Types.ObjectId(req.params.conversationID) } );
         const user = req.body.user;
