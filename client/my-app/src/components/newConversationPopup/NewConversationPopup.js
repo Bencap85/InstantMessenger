@@ -1,4 +1,3 @@
-import UsersList from './UsersList.js';
 import UsersSearch from './UsersSearch.js';
 import AddedUsers from './AddedUsers.js';
 import { state, useState, useContext } from 'react';

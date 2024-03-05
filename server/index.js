@@ -199,36 +199,6 @@ app.post('/updateLastViewedByMember/:conversationID', async (req, res) => {
     }
 });
 
-app.post('/usersList', async (req, res) => {
-    console.log(req.headers.authorization);
-    const jwt = req.headers.authorization.split(' ')[1];
-    console.log("Token recieved: " + jwt);
-    
-    if(verifyJWT(jwt) === false) {
-        console.log("Invalid Token");
-        res.sendStatus(403);
-        return;
-    } 
-
-    console.log("Token is valid, sending info");
-
-    let usersList = null;
-
-    try {
-        usersList = await usersCollection.find().toArray();
-    } catch(err) {
-        res.sendStatus(500);
-    }
-
-    if(!usersList) {
-        res.sendStatus(404);
-        return;
-    } 
-    
-    res.status(200).json({ usersList: usersList }).send();
-    
-
-});
 app.post('/saveMessage/:conversationID', async (req, res) => {
     console.log("Sender: " + JSON.stringify(req.body.message));
     const message = new Message({ content: req.body.message.content, sender: new mongoose.Types.ObjectId(req.body.message.sender), time: req.body.message.time });
