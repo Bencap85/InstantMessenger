@@ -12,31 +12,6 @@ export default function NewConversationPopup({ setShowPopup }) {
     const [ conversation, setConversation ] = useState({ members: [], messages: [] });
     const [ searchResults, setSearchResults ] = useState([]);
 
-    const addUser = (user) => {
-        for(let i = 0; i < conversation.members.length; i++) {
-            if(conversation.members[i]._id === user._id) {
-                return false;
-            }
-        }
-        setConversation({ ...conversation, members: [ ...conversation.members, user ]});
-    }
-    const removeUser = (user) => {
-        let newMembers = conversation.members.filter(member => {
-            return member._id !== user._id;
-        });
-        setConversation({ ...conversation, members: newMembers });
-    }
-
-    //Sends members ids vs members for efficiency
-    const createNewConversation = async (newConversation) => {
-        console.log("creating");
-        conversation.members.push(userContext.user);
-
-        const res = await axios.post('http://localhost:8080/createConversation', { conversation: newConversation }).catch(err => {
-            console.log(err);
-        });
-
-    }
 
     return(
         <div className="newConversationPopup">
@@ -52,14 +27,18 @@ export default function NewConversationPopup({ setShowPopup }) {
             </div>
             <div className="newConversationPopupFooter">
                     <button className="startNewConversationButton" onClick={() => {
-                        console.log('clicked');
-                        createNewConversation(conversation);
-                        setShowPopup(false);
+                        if(validConversation(conversation)) {
+                            createNewConversation(conversation);
+                            setShowPopup(false);
+                        } else {
+                            alert('Please select at least 1 other participant');
+                        }
                         
                     }}>Start</button>
                 </div>
         </div>
     );
+
     async function searchForUsers(email) {
         const results = [];
         let config = {
@@ -73,5 +52,35 @@ export default function NewConversationPopup({ setShowPopup }) {
         console.log("inSearchForUsers: " + JSON.stringify(results));
         setSearchResults(results);
         return results;
+    }
+    function validConversation(conversation) {
+        const peopleBesidesCreator = conversation.members.length;
+        if(peopleBesidesCreator < 1) {
+            return false;
+        }
+        return true;
+    }
+    function addUser(user) {
+        for(let i = 0; i < conversation.members.length; i++) {
+            if(conversation.members[i]._id === user._id) {
+                return false;
+            }
+        }
+        setConversation({ ...conversation, members: [ ...conversation.members, user ]});
+    }
+    function removeUser(user) {
+        let newMembers = conversation.members.filter(member => {
+            return member._id !== user._id;
+        });
+        setConversation({ ...conversation, members: newMembers });
+    }
+
+    async function createNewConversation(newConversation) {
+        conversation.members.push(userContext.user);
+
+        const res = await axios.post('http://localhost:8080/createConversation', { conversation: newConversation }).catch(err => {
+            console.log(err);
+        });
+
     }
 }
