@@ -12,23 +12,7 @@ export default function SignUp() {
 
     const userContext = useContext(UserContext);
 
-    function send() {  
-        let data = { email: email, 
-                     password: password };
-        
-            axios.post('http://localhost:8080/signUp', data).then(res => {
-                userContext.setJWT(res.data.token);
-                userContext.setUser({ ...res.data.user, isAuthorized: true });
-            }).catch(err => {
-                setSignUpSuccessful(false);
-                console.log(err.message);
-                
-            });
-        if(signUpSuccessful) {
-        navigate('/home', { state: { user: { ...userContext.user, isAuthorized: true } }});
-        }
-        
-    }
+    
 
     return(
         <div className='loginClass'>
@@ -47,9 +31,34 @@ export default function SignUp() {
             </div>
 
             <button onClick={() => {
-                send();
+                if(validEmail(email)) {
+                    send();
+                } else {
+                    alert('Please enter a valid email address');
+                }
             }}>Submit</button>
             {signUpSuccessful? null : <p>Oops, something went wrong. Please try again</p> }
         </div>
-    )
+    );
+    function send() {  
+        let data = { email: email, 
+                     password: password };
+        
+            axios.post('http://localhost:8080/signUp', data).then(res => {
+                userContext.setJWT(res.data.token);
+                userContext.setUser({ ...res.data.user, isAuthorized: true });
+            }).catch(err => {
+                setSignUpSuccessful(false);
+                console.log(err.message);
+                
+            });
+        if(signUpSuccessful) {
+        navigate('/home', { state: { user: { ...userContext.user, isAuthorized: true } }});
+        }
+        
+    }
+    function validEmail(str) {
+        const regex = /\w+@{1}\w+.\w+/;
+        return regex.test(str);
+    }
 }
