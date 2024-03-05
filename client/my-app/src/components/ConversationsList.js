@@ -22,7 +22,7 @@ export default function ConversationsList({ conversations, setShowPopup, setCurr
             <button className="newConversationButton" onClick={() => {
                 setShowPopup(true);
             }}>+</button>
-            {conversations.map(conversation => {
+            {conversations?.map(conversation => {
                 
                 return <ConversationItem conversation={conversation}
                                          setCurrentConversation={setCurrentConversation}

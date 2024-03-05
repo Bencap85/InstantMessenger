@@ -29,20 +29,20 @@ export default function CurrentConversation({ conversation, socket }) {
                 <>
                     {conversation.messages.map(m => {
 
-                        let username = getUsername(m.sender);
+                        let email = getEmail(m.sender);
                         let own = isOwn(m.sender);
 
-                        return <Message content={m.content} sendersName={username} own={own} />
+                        return <Message content={m.content} sender={email} own={own} />
                     })
                     }
                     {newMessages.map(m => {
 
-                        let username = getUsername(m.sender);
+                        let email = getEmail(m.sender);
                         let own = isOwn(m.sender);
 
                         console.log("Mapping a new message...");
 
-                        return <Message content={m.content} sendersName={username} own={own} />
+                        return <Message content={m.content} sender={email} own={own} />
                     })
                     }
                     
@@ -57,13 +57,13 @@ export default function CurrentConversation({ conversation, socket }) {
     function isOwn(sender) {
         return sender === userContext.user._id;
     }
-    function getUsername(sender) {
-        let username = "";
+    function getEmail(sender) {
+        let email = "";
         for(let i = 0; i < conversation.members.length; i++) {
             if(conversation.members[i]?._id === sender) {
-                return username = conversation.members[i].username;
+                return email = conversation.members[i].email;
             }
         }
-        return username;
+        return email;
     }
 }

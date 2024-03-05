@@ -1,6 +1,6 @@
 import '../App.css';
 
-export default function Message({ content, sendersName, own }) {
+export default function Message({ content, sender, own }) {
 
     let messageClassName;
     own? messageClassName = "messageFromMe" : messageClassName = "messageForMe";
@@ -12,7 +12,7 @@ export default function Message({ content, sendersName, own }) {
         <div className={"messageWrapper " + messageWrapperClassName} >
             <div className={"message " + messageClassName} >
                 <p>{content}</p>
-                <p>{sendersName}</p>
+                <p>{sender}</p>
             </div>
         </div>
     )

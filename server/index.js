@@ -73,13 +73,13 @@ let usersCollection = dbUtils.connect().db('InstantMessengerDB').collection('use
 let conversationsCollection = dbUtils.connect().db('InstantMessengerDB').collection('conversations');
 
 app.post('/login', async (req, res) => {
-    let username = req.body.username;
+    let email = req.body.email;
     let password = req.body.password;
 
     let user = null;
 
     try {
-        user = await usersCollection.findOne({ username: username, password: password });
+        user = await usersCollection.findOne({ email: email, password: password });
     } catch(err) {
         res.sendStatus(500);
     }
@@ -89,16 +89,16 @@ app.post('/login', async (req, res) => {
         return;
     }
 
-    let token = createJWT(user.username+user.password);
+    let token = createJWT(user.email+user.password);
     res.status(200).json({ token: token, user }).send();
     
 });
 app.post('/signUp', async (req, res) => {
-    let username = req.body.username;
+    let email = req.body.email;
     let password = req.body.password;
     let conversations = [];
 
-    let user = new User({username: username, password: password, conversations: conversations});
+    let user = new User({email: email, password: password, conversations: conversations});
     
     try {
         await usersCollection.insertOne(user);
@@ -107,7 +107,7 @@ app.post('/signUp', async (req, res) => {
         console.log(err);
         res.status(500).send();
     }
-    let token = createJWT(username+password);
+    let token = createJWT(email+password);
     console.log("User: " + JSON.stringify(user));
     res.status(201).json({ token: token, user: user }).send();
     
@@ -199,36 +199,6 @@ app.post('/updateLastViewedByMember/:conversationID', async (req, res) => {
     }
 });
 
-app.post('/usersList', async (req, res) => {
-    console.log(req.headers.authorization);
-    const jwt = req.headers.authorization.split(' ')[1];
-    console.log("Token recieved: " + jwt);
-    
-    if(verifyJWT(jwt) === false) {
-        console.log("Invalid Token");
-        res.sendStatus(403);
-        return;
-    } 
-
-    console.log("Token is valid, sending info");
-
-    let usersList = null;
-
-    try {
-        usersList = await usersCollection.find().toArray();
-    } catch(err) {
-        res.sendStatus(500);
-    }
-
-    if(!usersList) {
-        res.sendStatus(404);
-        return;
-    } 
-    
-    res.status(200).json({ usersList: usersList }).send();
-    
-
-});
 app.post('/saveMessage/:conversationID', async (req, res) => {
     console.log("Sender: " + JSON.stringify(req.body.message));
     const message = new Message({ content: req.body.message.content, sender: new mongoose.Types.ObjectId(req.body.message.sender), time: req.body.message.time });
@@ -250,6 +220,29 @@ app.post('/saveMessage/:conversationID', async (req, res) => {
         res.sendStatus(500);
     }
 
+});
+app.get('/searchForUsers/:email', async (req, res) => {
+
+    const jwt = req.headers.authorization.split(' ')[1];
+    if(verifyJWT(jwt) === false) {
+        console.log("Invalid Token");
+        res.sendStatus(403);
+        return;
+    } 
+
+    let results = [];
+    try {
+        if(!req.params.email) {
+            res.send([]);
+        }
+        cursor = usersCollection.find({ "email": { "$regex": `^${req.params.email}` } });
+        for await (const result of cursor) {
+            results.push(result);
+        }
+    } catch(err) {
+        res.sendStatus(500);
+    }
+    res.send(results);
 });
 
 app.get('/deleteUsers', (req, res) => {

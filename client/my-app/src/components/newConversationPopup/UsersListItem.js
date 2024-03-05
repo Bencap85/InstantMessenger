@@ -8,7 +8,7 @@ export default function UsersListItem({ user, addUser }) {
         <div className="usersListItem" onClick={() => {
             addUser(user);
         }}>
-            <VscAccount /> {user.username}
+            <VscAccount /> {user.email}
         </div>
     )
 }

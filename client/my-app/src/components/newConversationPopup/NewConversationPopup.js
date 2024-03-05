@@ -1,4 +1,4 @@
-import UsersList from './UsersList.js';
+import UsersSearch from './UsersSearch.js';
 import AddedUsers from './AddedUsers.js';
 import { state, useState, useContext } from 'react';
 import { UserContext } from '../../UserWrapper.js';
@@ -10,8 +10,57 @@ export default function NewConversationPopup({ setShowPopup }) {
     const userContext = useContext(UserContext);
 
     const [ conversation, setConversation ] = useState({ members: [], messages: [] });
+    const [ searchResults, setSearchResults ] = useState([]);
 
-    const addUser = (user) => {
+
+    return(
+        <div className="newConversationPopup">
+            <div className="newConversationPopupHeader">
+                <button className="closeNewConversationPopupButton" onClick={() => {
+                    setShowPopup(false);
+                }}>x</button>
+            </div>
+            <div className="newConversationPopupWrapper" >
+                <UsersSearch addUser={addUser} searchForUsers={searchForUsers} results={searchResults}/>
+                <AddedUsers users={conversation.members} removeUser={removeUser} />
+                
+            </div>
+            <div className="newConversationPopupFooter">
+                    <button className="startNewConversationButton" onClick={() => {
+                        if(validConversation(conversation)) {
+                            createNewConversation(conversation);
+                            setShowPopup(false);
+                        } else {
+                            alert('Please select at least 1 other participant');
+                        }
+                        
+                    }}>Start</button>
+                </div>
+        </div>
+    );
+
+    async function searchForUsers(email) {
+        const results = [];
+        let config = {
+            headers: {
+            'Authorization': `Bearer ${localStorage.getItem("JWT")}`
+            }
+        }
+        await axios.get(`http://localhost:8080/searchForUsers/${email}`, config).then(res => {
+            results.push(...res.data);
+        });
+        console.log("inSearchForUsers: " + JSON.stringify(results));
+        setSearchResults(results);
+        return results;
+    }
+    function validConversation(conversation) {
+        const peopleBesidesCreator = conversation.members.length;
+        if(peopleBesidesCreator < 1) {
+            return false;
+        }
+        return true;
+    }
+    function addUser(user) {
         for(let i = 0; i < conversation.members.length; i++) {
             if(conversation.members[i]._id === user._id) {
                 return false;
@@ -19,15 +68,14 @@ export default function NewConversationPopup({ setShowPopup }) {
         }
         setConversation({ ...conversation, members: [ ...conversation.members, user ]});
     }
-    const removeUser = (user) => {
+    function removeUser(user) {
         let newMembers = conversation.members.filter(member => {
             return member._id !== user._id;
         });
         setConversation({ ...conversation, members: newMembers });
     }
 
-    //Sends members ids vs members for efficiency
-    const createNewConversation = async (newConversation) => {
+    async function createNewConversation(newConversation) {
         conversation.members.push(userContext.user);
 
         const res = await axios.post('http://localhost:8080/createConversation', { conversation: newConversation }).catch(err => {
@@ -35,27 +83,4 @@ export default function NewConversationPopup({ setShowPopup }) {
         });
 
     }
-
-    return(
-        <div className="newConversationPopup">
-            <div className="newConversationPopupHeader">
-                <span className="newConversationHeaderText" >New Conversation</span>
-                <button className="closeNewConversationPopupButton" onClick={() => {
-                    setShowPopup(false);
-                }}>x</button>
-            </div>
-            <div className="newConversationPopupWrapper" >
-                <UsersList addUser={addUser} />
-                <AddedUsers users={conversation.members} removeUser={removeUser} />
-                
-            </div>
-            <div className="newConversationPopupFooter">
-                    <button className="startNewConversationButton" onClick={() => {
-                        createNewConversation(conversation);
-                        setShowPopup(false);
-                        
-                    }}>Start</button>
-                </div>
-        </div>
-    );
 }

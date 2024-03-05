@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 export default function Login() {
-    const [ username, setUsername ] = useState('');
+    const [ email, setEmail ] = useState('');
     const [ password, setPassword ] = useState('');
     const [ loginSuccessful, setLoginSuccessful ] = useState(true);
 
@@ -13,7 +13,7 @@ export default function Login() {
     const navigate = useNavigate();
 
     function send() {
-        let data = { username: username, 
+        let data = { email: email, 
                      password: password };
 
         axios.post('http://localhost:8080/login', data).then(res => {
@@ -29,7 +29,7 @@ export default function Login() {
             userContext.setJWT(res.data.token);
             userContext.setUser(res.data.user);
 
-            navigate('/home', { state: { user: { username: res.data.user.username, password: res.data.user.password, authorized: true } } })
+            navigate('/home', { state: { user: { email: res.data.user.email, password: res.data.user.password, authorized: true } } })
 
         }).catch(err => {
             setLoginSuccessful(false);
@@ -41,10 +41,10 @@ export default function Login() {
         <div className="loginClass">
             <div>
                 <h2 className="loginLabel">Login</h2>
-                <label>Username</label>
+                <label>Email</label>
                 <input type='text' onChange={(e) => {
-                    setUsername(e.target.value);
-                }} placeholder='Username...'/>
+                    setEmail(e.target.value);
+                }} placeholder='Email...'/>
             </div>
             <div>
                 <label>Password</label>
@@ -54,7 +54,6 @@ export default function Login() {
             </div>
 
             <button onClick={() => {
-                console.log(username);
                 send();
             }}>Submit</button>
 
