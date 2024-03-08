@@ -32,7 +32,7 @@ export default function CurrentConversation({ conversation, socket }) {
                         let email = getEmail(m.sender);
                         let own = isOwn(m.sender);
 
-                        return <Message content={m.content} sender={email} own={own} />
+                        return <Message content={m.content} sender={email} own={own} time={formatTime(m.time)} />
                     })
                     }
                     {newMessages.map(m => {
@@ -42,7 +42,7 @@ export default function CurrentConversation({ conversation, socket }) {
 
                         console.log("Mapping a new message...");
 
-                        return <Message content={m.content} sender={email} own={own} />
+                        return <Message content={m.content} sender={email} own={own} time={formatTime(m.time)} />
                     })
                     }
                     
@@ -65,5 +65,16 @@ export default function CurrentConversation({ conversation, socket }) {
             }
         }
         return email;
+    }
+    function formatTime(time) {
+        let currentDate = new Date();
+        time = new Date(time);
+        if(currentDate.getMonth() - time.getMonth() > 0) {
+            return '' + (currentDate.getMonth() - time.getMonth()) + ' months ago';
+        } else if(currentDate.getDay() - time.getDay() > 0) {
+            return '' + (currentDate.getDay() - time.getDay()) + ' days ago';
+        } else {
+            return time.toLocaleTimeString();
+        }
     }
 }

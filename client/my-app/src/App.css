@@ -114,14 +114,28 @@
   border-radius: 30px 30px 30px 0px;
   width: 30%;
   
-  
   background-color: rgb(5, 156, 250);
 
+}
+.message.hovered {
+  margin-left: 1%;
 }
 .messageFromMe {
   background-color: rgba(37, 161, 64, 0.789);
   border-radius: 30px 30px 0px 30px;
   margin-bottom: 10px;
+}
+.messageFromMe.hovered {
+  margin-right: 1%;
+}
+.messageTime {
+  font-size: 10px;
+}
+.messageWrapperForMe.messageTime {
+  margin-left: 10px;
+}
+.messageWrapperFromMe.messageTime {
+  margin-right: 10px;
 }
 .inputWrapper {
   margin-bottom: 0;
