@@ -26,7 +26,7 @@ export default function ConversationsList({ conversations, setShowPopup, setCurr
                 
                 return <ConversationItem conversation={conversation}
                                          setCurrentConversation={setCurrentConversation}
-                                         isCurrent={conversation._id === currentConversation?._id} 
+                                         isCurrent={currentConversation && conversation._id === currentConversation._id} 
                                          numNewMessages={idToNewMessages.get(conversation._id).length}
                                          />;
             })}

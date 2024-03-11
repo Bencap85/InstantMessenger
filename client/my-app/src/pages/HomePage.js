@@ -48,12 +48,12 @@ export default function HomePage({ socket }) {
         updateLastViewedByMember(currentConversation._id, Date.now());
     }
 
-    
+    console.log(JSON.stringify(currentConversation));
     return(
         <div>
             <Header />
             <div className="homeContentWrapper">
-                {showPopup? <NewConversationPopup setShowPopup={setShowPopup} />: null }
+                {showPopup? <NewConversationPopup setShowPopup={setShowPopup} conversations={conversations} setConversations={setConversations} />: null }
                 <ConversationsList conversations={conversations} setShowPopup={setShowPopup} setCurrentConversation={(conversation) => {
                     if(currentConversation) {
                         socket.emit('leaveConversation', currentConversation);
