@@ -69,10 +69,13 @@ export default function CurrentConversation({ conversation, socket }) {
     function formatTime(time) {
         let currentDate = new Date();
         time = new Date(time);
-        if(currentDate.getMonth() - time.getMonth() > 0) {
-            return '' + (currentDate.getMonth() - time.getMonth()) + ' months ago';
-        } else if(currentDate.getDay() - time.getDay() > 0) {
-            return '' + (currentDate.getDay() - time.getDay()) + ' days ago';
+        const diffTime = Math.abs(currentDate - time); // Get the time difference in milliseconds
+        const diffMonths = Math.trunc(diffTime / (1000 * 60 * 60 * 24 * 30));
+        const diffDays = Math.trunc(diffTime / (1000 * 60 * 60 * 24));
+        if(diffMonths > 0) {
+            return diffMonths + ' months ago';
+        } else if(diffDays > 0) {
+            return diffDays + ' days ago';
         } else {
             return time.toLocaleTimeString();
         }
