@@ -66,9 +66,6 @@
   padding: 0;
   
 }
-.conversationItem p::first-letter {
-  text-transform: uppercase;
-}
 .conversationItem:hover, .conversationItem.isCurrent {
   /* background-color: rgb(122, 119, 119); */
   /* height: 15%; */
