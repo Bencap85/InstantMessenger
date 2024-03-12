@@ -20,6 +20,8 @@ export default function HomePage({ socket }) {
     const [ currentConversation, setCurrentConversation ] = useState(null);
     const [ showPopup, setShowPopup ] = useState(false);
 
+    console.log("CurrentConversation: " + JSON.stringify(currentConversation));
+
     //On load, make axios request to server to populate page for user inquestion
     useEffect(() => {
         if(!user || user.isAuthorized === false) {
@@ -33,34 +35,25 @@ export default function HomePage({ socket }) {
 
     useEffect(() => {
         window.addEventListener('beforeunload', e => {
-            e.preventDefault()
-            e.returnValue = ''
-        })
-        window.addEventListener('unload', e => {
-            updateLastViewedByMember(currentConversation._id, Date.now());
-        })
-        return () => {
-        }
-      }, []);
+            if(currentConversation) {
+                updateLastViewedByMember(currentConversation._id, Date.now());
+            }
+            const message = 'Sure you want to leave?';
+            e.preventDefault();
+            e.returnValue = message;
+        });
+      }, [ currentConversation ]);
 
     if(currentConversation) {
         updateLastViewedByMember(currentConversation._id, Date.now());
     }
 
-    //////////////////////////
-    //
-    // On tab close, update last viewed time on server. Everything else is working
-    //
-    /////////////////////////
-
-    
-
-    
+    console.log(JSON.stringify(currentConversation));
     return(
         <div>
             <Header />
             <div className="homeContentWrapper">
-                {showPopup? <NewConversationPopup setShowPopup={setShowPopup} />: null }
+                {showPopup? <NewConversationPopup setShowPopup={setShowPopup} conversations={conversations} setConversations={setConversations} />: null }
                 <ConversationsList conversations={conversations} setShowPopup={setShowPopup} setCurrentConversation={(conversation) => {
                     if(currentConversation) {
                         socket.emit('leaveConversation', currentConversation);
@@ -102,28 +95,29 @@ export default function HomePage({ socket }) {
 
         return dataPromise?.data.conversations;
     }
-    function updateLastViewedByMember(conversationID, newTime) {
+    async function updateLastViewedByMember(conversationID, newTime) {
         let config = {
             headers: {
             'Authorization': `Bearer ${localStorage.getItem("JWT")}`
             }
         }
-        axios.post(`http://localhost:8080/updateLastViewedByMember/${conversationID}`,
+        await axios.post(`http://localhost:8080/updateLastViewedByMember/${conversationID}`,
          { user: userContext.user, newTime: newTime },
-         config ).then(() => {
-            // console.log("Successfully updated time");
-         });
+         config );
+         
     }
     function setUp() {
         console.log("Sending network requests...");
         getUserData().then(res => {
-            // if(!res) {
-            //     navigate('/login');
-            // }
-            // userContext.setUser(res);
+            if(!res) {
+                navigate('/login');
+            }
             setUserData(res);
         });
         getConversations().then(res => {
+            if(!res) {
+                navigate('/login');
+            }
             setConversations(res);
         });
     }

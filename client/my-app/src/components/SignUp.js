@@ -47,14 +47,15 @@ export default function SignUp() {
             axios.post('http://localhost:8080/signUp', data).then(res => {
                 userContext.setJWT(res.data.token);
                 userContext.setUser({ ...res.data.user, isAuthorized: true });
+
+                if(signUpSuccessful) {
+                    navigate('/home', { state: { user: { email: res.data.user.email, password: res.data.user.password, authorized: true } } })
+                }
             }).catch(err => {
                 setSignUpSuccessful(false);
                 console.log(err.message);
                 
             });
-        if(signUpSuccessful) {
-        navigate('/home', { state: { user: { ...userContext.user, isAuthorized: true } }});
-        }
         
     }
     function validEmail(str) {

@@ -3,7 +3,7 @@
 }
 .App {
   text-align: center;
-  background-color: rgba(76, 88, 103, 0.998);
+  background-color: rgba(225, 229, 235, 0.998);
 }
 .loginClass {
   display: inline;
@@ -28,37 +28,50 @@
   width: 50%;
 }
 .header {
-  background-color: rgba(76, 88, 103, 0.796);
-  padding-top: 20px;
-  padding-bottom: 20px;
-  width: 100%;
-  margin-bottom: 1px;
+  /* background-color: rgba(76, 88, 103, 0.796); */
+  padding-top: 1px;
+  padding-bottom: 0px;
+  width: 70%;
+  margin-left: 32%;
+  text-align: left;
+  font-size: 30px;
+  /* margin-bottom: 1px; */
+}
+.header h1 {
+  margin-bottom: 40px;
 }
 .conversationsList {
   border: 2px;
   border-radius: 20px;
   width: 30%;
   height: 90vh;
-  background-color: rgba(252, 252, 251, 0.845);
+  margin-right: 1%;
+  margin-left: 1%;
+  /* background-color: rgba(252, 252, 251, 0.845); */
 }
 .conversationItem {
-  border-bottom: 0.5px solid black;
+  /* border: 0.5px solid black; */
+  background-color: white;
+  margin-bottom: 2%;
+  border-radius: 20px;
   height: 10%;
-  width: 100%;
-  margin: 0;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
   padding-top: 10px;
 
 }
 .conversationItem p {
   margin: 0;
   padding: 0;
+  
 }
-.conversationItem:hover {
-  background-color: rgb(122, 119, 119);
-
-}
-.conversationItem.isCurrent {
-  background-color: rgba(76, 88, 103, 0.796);
+.conversationItem:hover, .conversationItem.isCurrent {
+  /* background-color: rgb(122, 119, 119); */
+  /* height: 15%; */
+  width: 95%;
+  /* box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.302); */
+  box-shadow: 0px 0px 80px 30px rgba(80, 79, 79, 0.302);
 
 }
 .conversationItemNotification {
@@ -70,10 +83,11 @@
   border-radius: 20px;
 }
 .currentConversation {
-  border-left: 2px solid rgba(76, 88, 103, 0.796);
-  background-color: rgba(252, 252, 251, 0.845);
+  /* border-left: 2px solid rgba(76, 88, 103, 0.796); */
+  background-color: rgb(252, 252, 251);
   border-radius: 20px;
   width: 70%;
+  margin-right: 2%;
   
 }
 .currentConversationMessages {
@@ -82,6 +96,7 @@
 .homeContentWrapper {
   display: flex;
   align-content: center;
+  
 }
 .messageWrapper {
   display: flex;
@@ -92,17 +107,32 @@
   justify-content: flex-end;
 }
 .message {
-  border: 2px solid;
-  border-radius: 10px;
+  margin-bottom: 1%;
+  border-radius: 30px 30px 30px 0px;
   width: 30%;
   
-  
-  background-color: blue;
+  background-color: rgb(5, 156, 250);
 
 }
+.message.hovered {
+  margin-left: 1%;
+}
 .messageFromMe {
-  background-color: rgb(37, 161, 37);
-  
+  background-color: rgba(37, 161, 64, 0.789);
+  border-radius: 30px 30px 0px 30px;
+  margin-bottom: 10px;
+}
+.messageFromMe.hovered {
+  margin-right: 1%;
+}
+.messageTime {
+  font-size: 10px;
+}
+.messageWrapperForMe.messageTime {
+  margin-left: 10px;
+}
+.messageWrapperFromMe.messageTime {
+  margin-right: 10px;
 }
 .inputWrapper {
   margin-bottom: 0;
@@ -114,15 +144,16 @@
   float: left;
   position: fixed;
   bottom: 25px;
-  left: 575px;
+  left: 35%;
   border: none;
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
+  box-shadow: 0 0 100px 1px rgba(0, 0, 0, 0.211);
 }
 .sendNewMessage {
   position: fixed;
   bottom: 25px;
-  left: 1530px;
+  left: 85.2%;
   height: 52px;
   width: 10%;
   background-color: rgba(65, 239, 65, 0.885);
@@ -142,7 +173,9 @@
   height: 550px;
   width: 1200px;
   margin: auto;
-  background-color: grey;
+  /* background-color: rgba(225, 229, 235, 0.998); */
+  background-color: whitesmoke;
+  box-shadow: 0px 0px 50px 5px rgba(0, 0, 0, 0.631);
   border-radius: 20px;
   
 }
@@ -165,7 +198,7 @@
   width: 30%;
   margin-right: 10%;
   padding: 2%;
-  border-right: 2px solid black;
+  /* border-right: 2px solid black; */
 }
 .results {
   overflow-y: scroll-hidden;
@@ -183,10 +216,21 @@
   font-size: 20px;
   width: 90%;
 }
+/* .results .usersListItem:hover {
+  background-color: white;
+} */
 .newConversationButton {
   height: 40px;
   width: 70px;
   font-size: 25px;
+  margin-bottom: 2%;
+  border: none;
+  border-radius: 20px;
+  background-color: white;
+}
+.newConversationButton:hover {
+  width: 15%;
+  box-shadow: 0px 0px 80px 30px rgba(80, 79, 79, 0.302);
 }
 .closeNewConversationPopupButton {
   float: right;
@@ -201,12 +245,17 @@
 }
 .startNewConversationButton {
   float: left;
-  margin-left: 10%;
-  background-color: rgb(233, 235, 233);
+  margin-left: 110px;
+  background-color: white;
+  border: none;
   border-radius: 20px;
   width: 12%;
   height: 100%;
   font-size: 20px;
+}
+.startNewConversationButton:hover {
+  margin-left: 105px;
+  width: 14%;
 }
 .startNewConversationButton:focus-visible {
   background-color: rgb(56, 56, 188);
@@ -218,19 +267,26 @@
   
 }
 .usersListItem:hover {
-  background-color: rgb(219, 216, 216);
+  background-color: white;
 }
 .addedUsers {
-  /* display: flex; */
   width: 50%;
+  text-align: center;
   
 }
 .addedUsers .usersListItem {
-  border: 2px solid black;
+  /* border: 2px solid black; */
+  background-color: white;
+  text-align: center;
   border-radius: 20px;
   height: 40px;
   padding: 10px;
-  margin: 10px;
+  margin: auto;
+  margin-bottom: 1%;
+  width: 90%;
+}
+.addedUsers .usersListItem:hover {
+  width: 100%;
 }
 
 

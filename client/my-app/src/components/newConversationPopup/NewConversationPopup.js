@@ -5,7 +5,7 @@ import { UserContext } from '../../UserWrapper.js';
 import '../../App.css';
 import axios from 'axios';
 
-export default function NewConversationPopup({ setShowPopup }) {
+export default function NewConversationPopup({ setShowPopup, conversations, setConversations }) {
 
     const userContext = useContext(UserContext);
 
@@ -30,6 +30,7 @@ export default function NewConversationPopup({ setShowPopup }) {
                         if(validConversation(conversation)) {
                             createNewConversation(conversation);
                             setShowPopup(false);
+                            setConversations([ ...conversations, conversation ]);
                         } else {
                             alert('Please select at least 1 other participant');
                         }

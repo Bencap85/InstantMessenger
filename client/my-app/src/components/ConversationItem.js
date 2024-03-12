@@ -12,7 +12,7 @@ export default function ConversationItem({ conversation, setCurrentConversation,
 
     let text = "";
     for(let i = 0; i < members?.length && i < 3; i++) {
-        text += members[i].email;
+        text += members[i].email.charAt(0).toUpperCase() + members[i].email.slice(1);
         if(i !== members?.length-1 && i !== 2) {
             text += ', ';
         }

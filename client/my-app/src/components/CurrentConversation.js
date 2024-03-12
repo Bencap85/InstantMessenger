@@ -32,7 +32,7 @@ export default function CurrentConversation({ conversation, socket }) {
                         let email = getEmail(m.sender);
                         let own = isOwn(m.sender);
 
-                        return <Message content={m.content} sender={email} own={own} />
+                        return <Message content={m.content} sender={email} own={own} time={formatTime(m.time)} />
                     })
                     }
                     {newMessages.map(m => {
@@ -42,7 +42,7 @@ export default function CurrentConversation({ conversation, socket }) {
 
                         console.log("Mapping a new message...");
 
-                        return <Message content={m.content} sender={email} own={own} />
+                        return <Message content={m.content} sender={email} own={own} time={formatTime(m.time)} />
                     })
                     }
                     
@@ -65,5 +65,19 @@ export default function CurrentConversation({ conversation, socket }) {
             }
         }
         return email;
+    }
+    function formatTime(time) {
+        let currentDate = new Date();
+        time = new Date(time);
+        const diffTime = Math.abs(currentDate - time); // Get the time difference in milliseconds
+        const diffMonths = Math.trunc(diffTime / (1000 * 60 * 60 * 24 * 30));
+        const diffDays = Math.trunc(diffTime / (1000 * 60 * 60 * 24));
+        if(diffMonths > 0) {
+            return diffMonths + ' months ago';
+        } else if(diffDays > 0) {
+            return diffDays + ' days ago';
+        } else {
+            return time.toLocaleTimeString();
+        }
     }
 }
