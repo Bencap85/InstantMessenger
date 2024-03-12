@@ -109,13 +109,15 @@ export default function HomePage({ socket }) {
     function setUp() {
         console.log("Sending network requests...");
         getUserData().then(res => {
-            // if(!res) {
-            //     navigate('/login');
-            // }
-            // userContext.setUser(res);
+            if(!res) {
+                navigate('/login');
+            }
             setUserData(res);
         });
         getConversations().then(res => {
+            if(!res) {
+                navigate('/login');
+            }
             setConversations(res);
         });
     }
