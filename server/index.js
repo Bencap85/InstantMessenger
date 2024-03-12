@@ -149,10 +149,13 @@ app.get('/getUserConversations/:userId', async (req, res) => {
     let conversations;
     console.log(req.params.userId);
     try {
-        conversations = await conversationsCollection.find({ "members._id": req.params.userId }).toArray();
+        const query = { 'members': { $elemMatch: { ['_id']: req.params.userId } } };
+        conversations = await conversationsCollection.find(query).toArray();
+        console.log(JSON.stringify(conversations));
     } catch(err) {
         console.log("Error with queury: " + err);
         res.sendStatus(400);
+        return;
     }
 
     res.status(200).json({ conversations: conversations });
@@ -195,8 +198,8 @@ app.post('/updateLastViewedByMember/:conversationID', async (req, res) => {
         console.log("Successfully updated time");
         res.sendStatus(200);
     } catch(err) {
-        console.log(err);
-        res.sendStatus(500);
+        
+        res.status(200).json({ message: 'Last viewed time not updated'}).send();
     }
 });
 
